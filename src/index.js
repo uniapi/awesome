@@ -1,18 +1,41 @@
-// DO WHATEVER YOU WANT HERE
+/*************************************************************************
+                          Written by Ali Muhammed
+                            uniapi@outlook.com
+                              October 6, 2018
+*************************************************************************/
 
-const createEnumerableProperty = () => {};
-const createNotEnumerableProperty = () => {};
-const createProtoMagicObject = () => {};
-const incrementor = () => {};
-const asyncIncrementor = () => {};
-const createIncrementer = () => {};
+const createEnumerableProperty = prop => prop;
+const createNotEnumerableProperty = prop => Symbol(prop);
+const createProtoMagicObject = () => {
+  const proto = () => { };
+  proto.prototype = Function.prototype;
+  return proto;
+};
 
-// return same argument not earlier than in one second, and not later, than in two
-const returnBackInSecond = () => {};
-const getDeepPropertiesCount = () => {};
-const createSerializedObject = () => {};
+let inc = 0;
+let asyncinc = 0;
+const incrementor = () => {
+  incrementor.valueOf = () => inc;
+  inc++;
+  return incrementor;
+};
+const asyncIncrementor = () => ++asyncinc;
+const createIncrementer = () => {
+  return { value: 0, next: function() { this.value++; return this; }, [Symbol.iterator]: function() { return this; } };
+};
+const returnBackInSecond = arg => new Promise(resolve => setTimeout(() => resolve(arg), 1000));
+const getDeepPropertiesCount = obj => {
+  let len = 0;
+  for (const prop of Object.keys(obj)) {
+    len++;
+    if (Object.keys(obj[prop]).length)
+      len += getDeepPropertiesCount(obj[prop]);
+  }
+  return len;
+};
+const createSerializedObject = () => null;
 const toBuffer = () => {};
-const sortByProto = () => {};
+const sortByProto = protos => protos.sort((a, b) => a.__proto__ - b.__proto__);
 
 exports.createEnumerableProperty = createEnumerableProperty;
 exports.createNotEnumerableProperty = createNotEnumerableProperty;
